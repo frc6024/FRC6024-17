@@ -79,7 +79,7 @@ public class Movement {
 		double tl=(x+y)/2;
 		double br=(x+y)/2;
 		double tr=((y-x)/2); 
-		double bl=((y-x)/2)*1.2;
+		double bl=((y-x)/2);
 		if(!(y ==0 && x > 0)){// Pls do not remove this, it makes it go straight
 			bl -= pr;
 			tl -= pr;
