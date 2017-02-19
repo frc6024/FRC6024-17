@@ -33,6 +33,8 @@ public class Robot extends IterativeRobot {
 		Auto.autoSetup();
 		Movement.drive(0, 0);
 		Vision.camera = NetworkTable.getTable("camera");
+		Vision.camera.putString("task", "stall");
+		Vision.visionInit();
 		Auto.chooser = new SendableChooser<Integer>();
 		Auto.choose();
 		SmartDashboard.putData("Chooser", Auto.chooser);

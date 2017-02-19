@@ -7,13 +7,19 @@ public class Vision {
 	
 	public static NetworkTable camera;
 	public static final int stop = 12;
-	public static final int screenCentre = 144;
-	public static final double tooBig = 10000;
+	public static final int screenCentre = 160;
+	public static final double tooBig = 6000000;
 	public static double x, y, w, h, center;
 	public static String task, current;
 	
+	public static void visionInit(){
+		current = "stall";
+		camera.putString("task", "stall");
+		camera.putString("current", current);
+	}
+	
 	public static void getData(){
-		double data[] = camera.getNumberArray("GL", new double[]{-1, -1, -1, -1});
+		double data[] = camera.getNumberArray("GR", new double[]{-1, -1, -1, -1});
 		x = data[0];
 		y = data[1];
 		w = data[2];
@@ -24,15 +30,15 @@ public class Vision {
 	
 	public static boolean canRunGear(){
 		camera.putString("task", "gear");
-		Timer.delay(0.075);
+		Timer.delay(0.1);
 		getData();
 		camera.putString("task", "stall");
-		if(x == -1 || w*h > tooBig || task == "boiler")
+		if(x == -1 || task == "boiler")
 			return false;
 		else return true;
 	}
 	
-	public static boolean canRunBioler(){
+	public static boolean canRunBoiler(){
 		return true;
 	}		
 	
@@ -42,7 +48,7 @@ public class Vision {
 		current = "Running Gear";
 		Timer.delay(0.3);
 		getData();
-		//Allign
+		//Align
 		while(!Robot.logitech.getRawButton(stop) && x != -1){
 			//Keep moving left or right until centre is in screen center
 			double curAngle = Robot.navX.getFusedHeading();
@@ -53,19 +59,25 @@ public class Vision {
 					getData();
 					if(x != -1)
 						break;
-					Timer.delay(0.01);
+					//Timer.delay(0.01);
+					current = "waiting";
+					camera.putString("current", current);
 				}
 				if(x == -1){
 					current = "stall";
 					camera.putString("task", "stall");
+					camera.putString("current", current);
 					return;
 				}
+				
 			}
-			if(Math.abs(center - screenCentre) < 5)
+			if(Math.abs(center - screenCentre) < 2)
 				break;
-			Movement.move((center - screenCentre)/432, 0, curAngle);
+			//Movement.move(0, (center - screenCentre)/1152, curAngle);\
+			camera.putNumber("moveData", center - screenCentre);
+			System.out.println(center - screenCentre);
 		}
-		
+		System.out.println("Move forward now");
 		Movement.drive(0, 0);
 		
 		
@@ -73,7 +85,7 @@ public class Vision {
 		double curAngle = Robot.navX.getFusedHeading();
 		while(w*h < tooBig && !Robot.logitech.getRawButton(stop)){
 			getData();
-			Movement.move(0.5, 0, curAngle);
+			//Movement.move(0.5, 0, curAngle);
 		}
 		Movement.drive(0, 0);
 		current = "stall";
