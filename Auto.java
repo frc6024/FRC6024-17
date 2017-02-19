@@ -1,3 +1,4 @@
+//Sunday 19th February @ 20:30
 package org.usfirst.frc.team6024.robot;
 
 import edu.wpi.first.wpilibj.Encoder;
@@ -27,7 +28,7 @@ public class Auto {
 	
 	public static void autoInit() {
 		// get value of type from SmartDashboard
-		int type = 0;
+		int type = chooser.getSelected();
 		autoType = chooser.getSelected();
 		System.out.println(autoType);
 		if (type == 1) {
@@ -136,11 +137,11 @@ public class Auto {
 	
 	public static double xDist = 0, yDist = 0;
 	public static void vectorAddition(){
-		xDist = ETR.get()/(2);
-		yDist = ETR.get()/(2);
+		xDist = EBL.get()/(2);
+		yDist = EBL.get()/(2);
 		
-		xDist -= EBR.get()/(2);
-		yDist += EBR.get()/(2);
+		xDist -= ETR.get()/(2);
+		yDist += ETR.get()/(2);
 	}
 	
 	public static void resetEnc(){

@@ -1,3 +1,4 @@
+//Sunday 19th February @ 20:30
 package org.usfirst.frc.team6024.robot;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -22,10 +23,10 @@ public class Robot extends IterativeRobot {
 		logitech = new Joystick(0);
 		navX = new AHRS(I2C.Port.kOnboard);
 		navX.reset();
-		TL = new VictorSP(0);
+		TL = new VictorSP(2);
 		TR = new VictorSP(1);
 		BR = new VictorSP(9);
-		BL = new VictorSP(2);
+		BL = new VictorSP(0);
 		shooter = new VictorSP(3);
 		winch = new VictorSP(4);
 		TR.setInverted(true);

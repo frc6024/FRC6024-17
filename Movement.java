@@ -1,3 +1,4 @@
+//Sunday 19th February @ 20:30
 package org.usfirst.frc.team6024.robot;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -19,7 +20,7 @@ public class Movement {
 
 		double tx = scale(xaxis, buf);
 		double ty = scale(yaxis, buf);
-		double tz = scale(zaxis, buf + 0.25);
+		double tz = scale(zaxis, buf + 0.2);
 		boolean trigger = Robot.logitech.getRawButton(1);
 		
 		double boost = map(slider, 1, -1, 0.2, 0.5);
@@ -36,17 +37,16 @@ public class Movement {
 				move(tx,ty);
 				
 		}
-		else if(tz!=0){ //Point Turn
-			drive(0.7*tz,-0.7*tz);
-			heading=Robot.navX.getFusedHeading();
-		}
+
 		else if(tx != 0 || ty != 0){      //Move
 			if(Math.abs(ty)>=Math.abs(tx))
 				move(0,ty);	
 			else
 				move(tx,0);
-		}
-		else if(Robot.logitech.getRawButton(5)){
+		}else if(tz!=0){ //Point Turn
+			drive(0.5*tz,-0.5*tz);
+			heading=Robot.navX.getFusedHeading();
+		}else if(Robot.logitech.getRawButton(5)){
 			orient(Robot.logitech.getPOV());
 		}
 		else{
@@ -75,7 +75,7 @@ public class Movement {
 	
 	public static void move(double x, double y, double fHeading){
 		pr= -sig(findHeading(Robot.navX.getFusedHeading(),fHeading))*0.8;
-		
+		Robot.table.putNumber("DH", fHeading);
 		double tl=(x+y)/2;
 		double br=(x+y)/2;
 		double tr=((y-x)/2); 
