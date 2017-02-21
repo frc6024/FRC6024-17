@@ -1,4 +1,4 @@
-//Sunday 21st February @ 20:30
+//Sunday 21th February @
 package org.usfirst.frc.team6024.robot;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -11,7 +11,7 @@ public class Auto {
 	public static Encoder ETL,ETR,EBR,EBL;
 	public static int autoType;
 	static final double spt = 0.3;
-	static final double spd = 0.6;
+	static final double spd = 0.4;
 	public static void autoSetup(){
 		EBL = new Encoder(6, 7,false,Encoder.EncodingType.k2X);
 		EBR = new Encoder(4, 5,false,Encoder.EncodingType.k2X);
@@ -39,14 +39,14 @@ public class Auto {
 	public static void resetEnc(){
 		EBR.reset();
 		EBL.reset();
-		ETR.reset();
+		ETR.reset(); 
 		ETL.reset();
 	}
 	
 	public static void autoInit() {
 		// get value of type from SmartDashboard
-		//int type = 14;
-		int type = chooser.getSelected()  - 1 ;
+		int type = 7;
+		//int type = chooser.getSelected()  - 1 ;
 		System.out.println(type);
 		if(type==0){
 			//do nothing
@@ -149,7 +149,7 @@ public class Auto {
 		Movement.drive(0,0);
 	}
 
-	public static void moveDistance(double x, double y, double fHeading, double distance){
+/*	public static void moveDistance(double x, double y, double fHeading, double distance){
 		resetEnc();
 		xDist = 0;
 		yDist = 0;
@@ -161,6 +161,15 @@ public class Auto {
 			System.out.println(xDist + "  " + yDist);
 		}
 		Movement.drive(0, 0);
+	}      */
+	public static void moveDistance(double x, double y,double fHeading, double fDist){
+		resetEnc();
+		double Dist = 0; 
+		while(fDist > Dist)
+		{
+			Movement.move(x, y, fHeading);
+			Dist = (ETR.get()/360) * 18.95;
+		}
 	}
 	public static void moveSecondNavX(double x,double y,double fHeading, double distance)
 	{
@@ -237,7 +246,7 @@ public class Auto {
 	public static void BlueMidSen(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		moveDistance(spd, 0, Robot.navX.getFusedHeading(), 80);
+		moveDistance(spd, 0, 0, 80);
 		Timer.delay(3);
 		moveDistance(-spd, 0, Robot.navX.getFusedHeading(), 48);
 		moveDistance(0,spd,Robot.navX.getFusedHeading(),24);
@@ -247,35 +256,30 @@ public class Auto {
 	
 	public static void BlueLeftSen(){
 		Robot.navX.reset();
-		moveDistance(0.4,0,Robot.navX.getFusedHeading(),103);
-		Movement.orient(60);
-		moveDistance(0.4,0,Robot.navX.getFusedHeading(),50);
+		moveDistance(0,spd,0,82);
+		Movement.orient(330);
+		moveDistance(spd,0,Robot.navX.getFusedHeading(),22);
 		Timer.delay(3);
-		moveDistance(-0.4,0,Robot.navX.getFusedHeading() ,36); // should be 84
+		moveDistance(-spd,0,Robot.navX.getFusedHeading() ,36); // should be 84
 		Movement.orient(345);
-		moveDistance(0, -0.4,Robot.navX.getFusedHeading(), 18);
-		moveDistance(0, 0,Robot.navX.getFusedHeading(), 1);
+		moveDistance(0, -spd,Robot.navX.getFusedHeading(), 18);
 		Movement.shoot(15000);
-		
-		
 	}
 	
 	public static void BlueRightSen(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		Robot.navX.reset();
-		moveDistance(0.4,0,Robot.navX.getFusedHeading(),103);
-		Movement.orient(300);
-		moveDistance(0.4,0,Robot.navX.getFusedHeading(),50);
+		moveDistance(0,spd,Robot.navX.getFusedHeading(),103);
+		Movement.orient(30);
+		moveDistance(spd,0,Robot.navX.getFusedHeading(),50);
 		Timer.delay(3);
-		moveDistance(-0.4,0,Robot.navX.getFusedHeading() ,36); // should be 84
-		moveDistance(0.4,0.4,Robot.navX.getFusedHeading() ,12);// should be 300
+		moveDistance(-spd,0,Robot.navX.getFusedHeading() ,36);           // should be 84
+		moveDistance(spd,spd,Robot.navX.getFusedHeading() ,12);// should be 300
 	}
 	
 	public static void RedLeftSen(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		Robot.navX.reset();
 		moveDistance(0.4,0,Robot.navX.getFusedHeading(),103);
 		Movement.orient(60);
 		moveDistance(0.4,0,Robot.navX.getFusedHeading(),50);
@@ -287,7 +291,6 @@ public class Auto {
 	public static void RedMidSen(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		Robot.navX.reset();
 		moveDistance(0.4, 0,Robot.navX.getFusedHeading(), 86);
 		Timer.delay(3);
 		moveDistance(-0.4, 0, Robot.navX.getFusedHeading(), 48);
@@ -299,7 +302,6 @@ public class Auto {
 	public static void RedRightSen(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		Robot.navX.reset();
 		moveDistance(0.4,0,Robot.navX.getFusedHeading(),103);
 		Movement.orient(300);
 		moveDistance(0.4,0,Robot.navX.getFusedHeading(),50);
@@ -324,7 +326,6 @@ public class Auto {
 	public static void BlueLeftSecondNavX(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		Robot.navX.reset();
 		moveSecondNavX(0.4,0,0,103);
 		Movement.orient(60);
 		moveSecondNavX(0.4,0,Robot.navX.getFusedHeading(),50);
@@ -341,7 +342,6 @@ public class Auto {
 	public static void BlueRightSecondNavX(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		Robot.navX.reset();
 		moveSecondNavX(0.4,0,0,103);
 		Movement.orient(300);
 		moveSecondNavX(0.4,0,Robot.navX.getFusedHeading(),50);
@@ -353,7 +353,6 @@ public class Auto {
 	public static void RedLeftSecondNavX(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		Robot.navX.reset();
 		moveSecondNavX(0.4,0,0,103);
 		Movement.orient(60);
 		moveSecondNavX(0.4,0,Robot.navX.getFusedHeading(),50);
@@ -365,7 +364,6 @@ public class Auto {
 	public static void RedMidSecondNavX(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		Robot.navX.reset();
 		moveSecondNavX(0.4, 0,0, 86);
 		Timer.delay(3);
 		moveSecondNavX(-0.4, 0, Robot.navX.getFusedHeading(), 48);
@@ -377,7 +375,6 @@ public class Auto {
 	public static void RedRightSecondNavX(){
 		Robot.navX.reset();
 		Timer.delay(0.2);
-		Robot.navX.reset();
 		moveSecondNavX(0.4,0,0,103);
 		Movement.orient(300);
 		moveSecondNavX(0.4,0,Robot.navX.getFusedHeading(),50);
