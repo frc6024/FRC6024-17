@@ -1,4 +1,4 @@
-//Sunday 19th February @ 20:30
+//Sunday 21st February @ 20:30
 package org.usfirst.frc.team6024.robot;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -18,7 +18,9 @@ public class Vision {
 		camera.putString("task", "stall");
 		camera.putString("current", current);
 	}
-	
+	public static double sig(double po){
+		return (2/(1+Math.exp(-po/10)))-1;
+	}
 	public static void getData(){
 		double data[] = camera.getNumberArray("GR", new double[]{-1, -1, -1, -1});
 		x = data[0];
@@ -75,7 +77,7 @@ public class Vision {
 			}
 			if(Math.abs(center - screenCentre) < 20)
 				break;
-			Movement.move(0,Math.signum(screenCentre - center)*Math.sqrt(Math.abs((screenCentre - center)/1000)),  curAngle);
+			Movement.move(0,-0.4*sig((center- screenCentre)/100),  curAngle);
 			camera.putNumber("moveData", center - screenCentre);
 			//System.out.println(center - screenCentre);
 		}
@@ -87,7 +89,7 @@ public class Vision {
 		double curAngle = Robot.navX.getFusedHeading();
 		while(w*h < tooBig && !Robot.logitech.getRawButton(stop)){
 			getData();
-			double yVal = Math.signum(screenCentre - center)*Math.sqrt(Math.abs((screenCentre - center)/1200));
+			double yVal = -0.4*sig((center- screenCentre)/120);
 			if(Math.abs(screenCentre - center) < 10)
 				yVal = 0;
 			Movement.move(0.5,yVal, curAngle);

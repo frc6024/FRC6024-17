@@ -1,4 +1,4 @@
-//Sunday 19th February @ 20:30
+//Sunday 21st February @ 20:30
 package org.usfirst.frc.team6024.robot;
 
 import com.kauailabs.navx.frc.AHRS;
