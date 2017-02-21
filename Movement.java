@@ -23,8 +23,8 @@ public class Movement {
 		double tz = scale(zaxis, buf + 0.2);
 		boolean trigger = Robot.logitech.getRawButton(1);
 		
-		double boost = map(slider, 1, -1, 0.2, 0.5);
-		if(Robot.logitech.getRawButton(11)) boost=0.7;
+		double boost = map(slider, 1, -1, 0.2, 0.8);
+		if(Robot.logitech.getRawButton(11)) boost=1.2;
 		
 		tx*=boost;
 		ty*=boost;
@@ -74,22 +74,20 @@ public class Movement {
 	}
 	
 	public static void move(double x, double y, double fHeading){
-		pr= -sig(findHeading(Robot.navX.getFusedHeading(),fHeading))*0.8;
+		pr= -sig(findHeading(Robot.navX.getFusedHeading(),fHeading));
+		
 		Robot.table.putNumber("DH", fHeading);
+		
 		double tl=(x+y)/2;
 		double br=(x+y)/2;
 		double tr=((y-x)/2); 
 		double bl=((y-x)/2);
-		if(!(y ==0 && x > 0)){// Pls do not remove this, it makes it go straight
-			bl -= pr;
-			tl -= pr;
-		}else{
-			br += pr*0.5;
-			tr += pr*0.5;
-		}
 		
-		double exc=Math.max(Math.max(Math.max(tl,br),tr),bl);
-		if(exc>1) {tl/=exc;br/=exc;tr/=exc;bl/=exc;} //Validation
+		br += pr;
+		tr += pr;
+	
+		//double exc=Math.max(Math.max(Math.max(tl,br),tr),bl);
+		//if(exc>1) {tl/=exc;br/=exc;tr/=exc;bl/=exc;} //Validation
 		Robot.TL.set(tl);
 		Robot.BR.set(br);
 		Robot.TR.set(tr);
