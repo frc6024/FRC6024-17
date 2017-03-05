@@ -9,7 +9,7 @@ public class Vision {
 	public static NetworkTable camera;
 	public static final int stop = 12;
 	public static final int screenCentre = 160;
-	public static final double tooBig = 6000000;
+	public static final double tooBig = 7000;
 	public static double x, y, w, h, center;
 	public static String task, current;
 	
@@ -19,7 +19,7 @@ public class Vision {
 		camera.putString("current", current);
 	}
 	public static double sig(double po){
-		return (2/(1+Math.exp(-po/10)))-1;
+		return (2/(1+Math.exp(-po))) - 1;
 	}
 	public static void getData(){
 		double data[] = camera.getNumberArray("GR", new double[]{-1, -1, -1, -1});
@@ -50,7 +50,7 @@ public class Vision {
 		Movement.orient(0);
 		camera.putString("task", "gear");
 		current = "Running Gear";
-		Timer.delay(0.3);
+		Timer.delay(0.4);
 		getData();
 		//Align
 		while(!Robot.logitech.getRawButton(stop) && x != -1){
@@ -75,11 +75,11 @@ public class Vision {
 				}
 				
 			}
-			if(Math.abs(center - screenCentre) < 20)
+			if(Math.abs(center - screenCentre) < 50)
 				break;
-			Movement.move(0,-0.4*sig((center- screenCentre)/100),  curAngle);
-			camera.putNumber("moveData", center - screenCentre);
-			//System.out.println(center - screenCentre);
+			Movement.move(0,-0.6*sig((center- screenCentre)/80),  curAngle);
+			camera.putNumber("moveData", -0.4*sig((center- screenCentre)/80));
+			System.out.println(-0.4*sig((center- screenCentre)/80));
 		}
 		System.out.println("Move forward now");
 		Movement.drive(0, 0);
@@ -87,13 +87,13 @@ public class Vision {
 		
 		//Do PID with camera or navX and Go Forward
 		double curAngle = Robot.navX.getFusedHeading();
-		while(w*h < tooBig && !Robot.logitech.getRawButton(stop)){
+		while(w*h < tooBig && !Robot.logitech.getRawButton(stop) && x != -1){
 			getData();
-			double yVal = -0.4*sig((center- screenCentre)/120);
+			double yVal = -0.3*sig((center- screenCentre)/120);
 			if(Math.abs(screenCentre - center) < 10)
 				yVal = 0;
-			Movement.move(0.5,yVal, curAngle);
-			camera.putNumber("moveData", center - screenCentre);
+			Movement.move(0.45,yVal, curAngle);
+			camera.putNumber("moveData", yVal);
 		}
 		Movement.drive(0, 0);
 		current = "stall";
