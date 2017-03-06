@@ -103,7 +103,7 @@ public class Robot extends IterativeRobot {
 			shooter.set(0);
 			loader.set(0);
 		}
-		System.out.println(sp+" | "+ls+" | "+ES.getRate());
+		System.out.println(sp+" | "+ls+" | "+Auto.ES.getRate());
 		//loader.set(-0.1);
 		if(logitech.getRawButton(2)){
 			redLight.set(true);
