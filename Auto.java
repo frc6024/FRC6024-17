@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Auto {
 
-	public static Encoder ETL,ETR,EBR,EBL, ES;
+	public static Encoder ETL,ETR,EBR,EBL, ES, EL;
 	public static int autoType;
 	static final double spd = 0.4;
 	
@@ -19,6 +19,7 @@ public class Auto {
 		ETR = new Encoder(3, 4,false,Encoder.EncodingType.k2X);
 		ETL = new Encoder(1, 2,true,Encoder.EncodingType.k2X);
 		ES = new Encoder(9, 0, true, Encoder.EncodingType.k2X);
+		EL = new Encoder(8,0,true, Encoder.EncodingType.k2X);
 		ES.setDistancePerPulse(0.05);
 	}
 	
@@ -28,6 +29,7 @@ public class Auto {
 		Robot.table.putNumber("EBL", EBL.get());
 		Robot.table.putNumber("EBR", EBR.get());
 		Robot.table.putNumber("ES", ES.get());
+		//Robot.table.putNumber("EL", EL.get());	
 		Robot.table.putNumber("Rate", ES.getRate());
 		Robot.table.putNumber("Xaxis", xDist);
 		Robot.table.putNumber("Yaxis", yDist);

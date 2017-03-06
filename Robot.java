@@ -75,18 +75,33 @@ public class Robot extends IterativeRobot {
 		long randomvariable = 0;
 		randomvariable++;
 	}
+	boolean edge;
+	long tim;
+	double ls=0;
+	double sp=0;
 	public void testPeriodic(){
+		sp=((logitech.getRawAxis(3)*-1)+1)/2;
+		ls=((second.getRawAxis(3)*-1)+1)/2;
 		if(logitech.getRawButton(1)){
-			double sp=((logitech.getRawAxis(3)*-1)+1)/2;
-			double ls=((second.getRawAxis(3)*-1)+1)/2;
+			if(edge){
+				tim=System.currentTimeMillis();
+				edge=false;
+			}
+			
+			if((System.currentTimeMillis()-tim)>2000){
+				
+				loader.set(ls);
+			}
+			 
 			shooter.set(sp);
-			loader.set(ls);
-			System.out.println(sp);
+			
 		}
 		else{
+			edge=true;
 			shooter.set(0);
 			loader.set(0);
 		}
+		System.out.println(sp+" | "+ls);
 		//loader.set(-0.1);
 		if(logitech.getRawButton(2)){
 			redLight.set(true);
