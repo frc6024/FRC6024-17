@@ -19,7 +19,7 @@ public class Auto {
 		ETR = new Encoder(3, 4,false,Encoder.EncodingType.k2X);
 		ETL = new Encoder(1, 2,true,Encoder.EncodingType.k2X);
 		ES = new Encoder(9, 0, true, Encoder.EncodingType.k2X);
-		EL = new Encoder(8,0,true, Encoder.EncodingType.k2X);
+		//EL = new Encoder(8,0,true, Encoder.EncodingType.k2X);
 		ES.setDistancePerPulse(0.05);
 	}
 	

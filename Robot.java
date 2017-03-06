@@ -83,17 +83,19 @@ public class Robot extends IterativeRobot {
 		sp=((logitech.getRawAxis(3)*-1)+1)/2;
 		ls=((second.getRawAxis(3)*-1)+1)/2;
 		if(logitech.getRawButton(1)){
-			if(edge){
-				tim=System.currentTimeMillis();
-				edge=false;
-			}
-			
-			if((System.currentTimeMillis()-tim)>2000){
-				
-				loader.set(ls);
-			}
+//			if(edge){
+//				tim=System.currentTimeMillis();
+//				edge=false;
+//			}
+//			
+//			if((System.currentTimeMillis()-tim)>2000){
+//				
+//				loader.set(ls);
+//			}
 			 
 			shooter.set(sp);
+			if(Math.abs(Auto.ES.getRate()) > 35)
+				loader.set(ls);
 			
 		}
 		else{
@@ -101,7 +103,7 @@ public class Robot extends IterativeRobot {
 			shooter.set(0);
 			loader.set(0);
 		}
-		System.out.println(sp+" | "+ls);
+		System.out.println(sp+" | "+ls+" | "+ES.getRate());
 		//loader.set(-0.1);
 		if(logitech.getRawButton(2)){
 			redLight.set(true);
