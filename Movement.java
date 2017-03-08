@@ -81,7 +81,10 @@ public class Movement {
 		
 		br += pr;
 		tr += pr;
-	
+//		tl+=pr;
+//		br+=pr;
+//		tr+=pr;
+//		bl+=pr;
 		Robot.TL.set(tl);
 		Robot.BR.set(br);
 		Robot.TR.set(tr);

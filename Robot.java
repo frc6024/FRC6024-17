@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -49,8 +50,8 @@ public class Robot extends IterativeRobot {
 		dashboard();
 		ds = DriverStation.getInstance();
 
-		redLight = new Solenoid(1);
-		blueLight = new Solenoid(3);
+		redLight = new Solenoid(3);
+		blueLight = new Solenoid(1);
 		backLight = new Solenoid(4);
 	}
 	
@@ -83,26 +84,32 @@ public class Robot extends IterativeRobot {
 		sp=((logitech.getRawAxis(3)*-1)+1)/2;
 		ls=((second.getRawAxis(3)*-1)+1)/2;
 		if(logitech.getRawButton(1)){
-//			if(edge){
-//				tim=System.currentTimeMillis();
-//				edge=false;
-//			}
-//			
-//			if((System.currentTimeMillis()-tim)>2000){
-//				
-//				loader.set(ls);
-//			}
-			 
-			shooter.set(sp);
-			if(Math.abs(Auto.ES.getRate()) > 35)
-				loader.set(ls);
+			double shootE=Math.abs(Auto.ES.getRate());
+
+			if(shootE<33){
+				shooter.set(1);
+			}
+			else if(shootE>36){
+				shooter.set(0.2);
+			}
+			else{
+				shooter.set(0.78);
+			}
+			//shooter.set(0.7 + 0.1*(35 - Auto.ES.getRate()));
+			if(shootE > 33)
+				loader.set(0.38);
+			else
+				loader.set(0);
 			
 		}
+		else if(logitech.getRawButton(11)){
+			shooter.set(-0.4);
+		}
 		else{
-			edge=true;
 			shooter.set(0);
 			loader.set(0);
 		}
+		
 		System.out.println(sp+" | "+ls+" | "+Auto.ES.getRate());
 		//loader.set(-0.1);
 		if(logitech.getRawButton(2)){
@@ -128,7 +135,7 @@ public class Robot extends IterativeRobot {
 	public static double xDist = 0, yDist = 0;
 	
 	public void teleopInit(){
-		
+		navX.reset();
 		dashboard();
 		Movement.drive(0, 0);
 		Vision.camera.putString("task", "stall");
@@ -139,10 +146,12 @@ public class Robot extends IterativeRobot {
 			blueLight.set(false);
 		 }
 		 if(col==2){
-			redLight.set(true);
+			 System.out.println("dkjbdsj,fv");
+			//redLight.set(true);
 			blueLight.set(false);
 		 }
 		 if(col==3){
+			System.out.println("trgngn");
 			redLight.set(false);
 			blueLight.set(true);
 		 }
@@ -155,6 +164,7 @@ public class Robot extends IterativeRobot {
 			Vision.runGear();
 		}
 		secondJoystick();
+		
 	}	
 	
 	

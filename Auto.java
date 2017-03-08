@@ -18,8 +18,8 @@ public class Auto {
 		EBR = new Encoder(5, 6,false,Encoder.EncodingType.k2X);
 		ETR = new Encoder(3, 4,false,Encoder.EncodingType.k2X);
 		ETL = new Encoder(1, 2,true,Encoder.EncodingType.k2X);
-		ES = new Encoder(9, 0, true, Encoder.EncodingType.k2X);
-		//EL = new Encoder(8,0,true, Encoder.EncodingType.k2X);
+		ES = new Encoder(0, 11, true, Encoder.EncodingType.k2X);
+		EL = new Encoder(9,12,true, Encoder.EncodingType.k4X);
 		ES.setDistancePerPulse(0.05);
 	}
 	
@@ -29,7 +29,7 @@ public class Auto {
 		Robot.table.putNumber("EBL", EBL.get());
 		Robot.table.putNumber("EBR", EBR.get());
 		Robot.table.putNumber("ES", ES.get());
-		//Robot.table.putNumber("EL", EL.get());	
+		Robot.table.putNumber("EL", EL.get());	
 		Robot.table.putNumber("Rate", ES.getRate());
 		Robot.table.putNumber("Xaxis", xDist);
 		Robot.table.putNumber("Yaxis", yDist);

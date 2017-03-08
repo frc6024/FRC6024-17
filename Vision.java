@@ -8,7 +8,7 @@ public class Vision {
 	
 	public static NetworkTable camera;
 	public static final int stop = 12;
-	public static final int screenCentre = 160;
+	public static final int screenCentre = 180;
 	public static final double tooBig = 7000;
 	public static double x, y, w, h, center;
 	public static String task, current;
@@ -75,7 +75,7 @@ public class Vision {
 				}
 				
 			}
-			if(Math.abs(center - screenCentre) < 50)
+			if(Math.abs(center - screenCentre) < 30)
 				break;
 			Movement.move(0,-0.6*sig((center- screenCentre)/80),  curAngle);
 			camera.putNumber("moveData", -0.4*sig((center- screenCentre)/80));
@@ -89,12 +89,16 @@ public class Vision {
 		double curAngle = Robot.navX.getFusedHeading();
 		while(w*h < tooBig && !Robot.logitech.getRawButton(stop) && x != -1){
 			getData();
-			double yVal = -0.3*sig((center- screenCentre)/120);
+			double constant = 1+(40-(w))/30;
+			double yVal = -0.3*constant*sig((center- screenCentre)/120);
 			if(Math.abs(screenCentre - center) < 10)
 				yVal = 0;
-			Movement.move(0.45,yVal, curAngle);
+			Movement.move(0.6,yVal, curAngle);
 			camera.putNumber("moveData", yVal);
 		}
+		long tim=System.currentTimeMillis();
+		while(System.currentTimeMillis()-tim<1000)
+			Movement.move(0.45, 0, curAngle);
 		Movement.drive(0, 0);
 		current = "stall";
 		camera.putString("task", "stall");
