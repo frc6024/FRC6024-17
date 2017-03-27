@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -19,9 +18,9 @@ public class Robot extends IterativeRobot {
 	public static VictorSP TL, TR, BR, BL;
 	public static AHRS navX;
 	public static VictorSP shooter, loader, winch;
-	public static DriverStation ds;
-	public static Solenoid backLight, blueLight, redLight,temp;
-	public void robotInit(){
+	public static Solenoid backLight, blueLight, redLight;
+
+	public void robotInit() {
 		table = NetworkTable.getTable("datatable");
 		logitech = new Joystick(0);
 		second = new Joystick(1);
@@ -35,177 +34,117 @@ public class Robot extends IterativeRobot {
 		winch = new VictorSP(4);
 		loader = new VictorSP(8);
 		TR.setInverted(true);
-		BR.setInverted(true);	
+		BR.setInverted(true);
 		loader.setInverted(true);
 		Auto.autoSetup();
 		Movement.drive(0, 0);
 		Vision.camera = NetworkTable.getTable("camera");
-		Vision.camera.putString("task", "stall");
 		Vision.visionInit();
 		Auto.chooser = new SendableChooser<Integer>();
 		Auto.typeChooser = new SendableChooser<Integer>();
-		Auto.allianceChooser =  new SendableChooser<Integer>();
+		Auto.allianceChooser = new SendableChooser<Integer>();
 		Auto.choose();
-		
-		dashboard();
-		ds = DriverStation.getInstance();
 
-		redLight = new Solenoid(3);
-		blueLight = new Solenoid(1);
-		backLight = new Solenoid(4);
+		dashboard();
+
+		redLight = new Solenoid(1);
+		blueLight = new Solenoid(6);
+		backLight = new Solenoid(7);
+		
+		Second.joy = new Joystick(1);
+		Second.camSwitch = new Toggle(Second.joy, 6);
 	}
-	
-	public void disabled(){
-		Movement.drive(0,0);
+
+	public void disabled() {
+		Movement.drive(0, 0);
+		shooter.set(0);
+		loader.set(0);
 		dashboard();
 		redLight.set(false);
 		blueLight.set(false);
 		backLight.set(false);
 	}
-	
-	public void autonomousInit(){
+
+	public void autonomousInit() {
 		Robot.navX.reset();
 		dashboard();
 		Auto.autoInit();
 		Movement.drive(0, 0);
+		shooter.set(0);
+		loader.set(0);
 	}
 
-	
-	public void autonomousPeriodic(){
+	public void autonomousPeriodic() {
 		dashboard();
 		long randomvariable = 0;
 		randomvariable++;
 	}
-	boolean edge;
-	long tim;
-	double ls=0;
-	double sp=0;
-	public void testPeriodic(){
-		sp=((logitech.getRawAxis(3)*-1)+1)/2;
-		ls=((second.getRawAxis(3)*-1)+1)/2;
-		if(logitech.getRawButton(1)){
-			double shootE=Math.abs(Auto.ES.getRate());
 
-			if(shootE<33){
-				shooter.set(1);
-			}
-			else if(shootE>36){
-				shooter.set(0.2);
-			}
-			else{
-				shooter.set(0.78);
-			}
-			//shooter.set(0.7 + 0.1*(35 - Auto.ES.getRate()));
-			if(shootE > 33)
-				loader.set(0.38);
-			else
-				loader.set(0);
-			
-		}
-		else if(logitech.getRawButton(11)){
-			shooter.set(-0.4);
-		}
-		else{
-			shooter.set(0);
-			loader.set(0);
-		}
-		
-		System.out.println(sp+" | "+ls+" | "+Auto.ES.getRate());
-		//loader.set(-0.1);
-		if(logitech.getRawButton(2)){
+	public void testPeriodic() {
+		if (logitech.getRawButton(2)) {
 			redLight.set(true);
-		}
-		else{
+		} else {
 			redLight.set(false);
 		}
-		if(logitech.getRawButton(3)){
+		if (logitech.getRawButton(3)) {
 			blueLight.set(true);
-		}
-		else{
+		} else {
 			blueLight.set(false);
 		}
 		
+		if(logitech.getRawButton(4)){
+			backLight.set(true);
+		}else{
+			backLight.set(false);
+		}
+
 	}
-	
-	public void disabledInit(){
-		Vision.camera.putString("task", "stall");
+
+	public void disabledInit() {
 	}
-	
-	
+
 	public static double xDist = 0, yDist = 0;
-	
-	public void teleopInit(){
+
+	public void teleopInit() {
 		navX.reset();
 		dashboard();
 		Movement.drive(0, 0);
-		Vision.camera.putString("task", "stall");
 		int col = Auto.allianceChooser.getSelected();
-		 backLight.set(true);
-		 if(col==1){
+		backLight.set(true);
+		if (col == 1) {
 			redLight.set(false);
 			blueLight.set(false);
-		 }
-		 if(col==2){
-			 System.out.println("dkjbdsj,fv");
-			//redLight.set(true);
+		}
+		if (col == 2) {
+			System.out.println("dkjbdsj,fv");
+			// redLight.set(true);
 			blueLight.set(false);
-		 }
-		 if(col==3){
+		}
+		if (col == 3) {
 			System.out.println("trgngn");
 			redLight.set(false);
 			blueLight.set(true);
-		 }
+		}
 	}
 
-	public void teleopPeriodic(){
+	public void teleopPeriodic() {
 		dashboard();
 		Movement.teleOpMove();
-		if(logitech.getRawButton(10) && Vision.canRunGear()){
-			Vision.runGear();
-		}
-		secondJoystick();
-		
-	}	
-	
-	
-	public static void dashboard(){
+		Second.run();
+	}
+
+	public static void dashboard() {
 		table.putNumber("TL", TL.get());
 		table.putNumber("TR", TR.get());
 		table.putNumber("BL", BL.get());
 		table.putNumber("BR", BR.get());
 		table.putNumber("HE", navX.getFusedHeading());
 		table.putNumber("Time", System.currentTimeMillis());
-		Auto.autoDash();
-	}
-	
-	public static void secondJoystick(){
-
-		if(second.getRawButton(9))
-			winch.set(0.3);
-		else if(second.getRawButton(10))
-			winch.set(0.7);
-		else if(second.getRawButton(11))
-			winch.set(-0.3);
-		else if(second.getRawButton(12))
-			winch.set(-0.7);
-		else
-			winch.set(0);
 		
-		if(second.getRawButton(3))
-			shooter.set(0.6);
-		else if(second.getRawButton(4))
-			shooter.set(-0.6);
-		else if(second.getRawButton(5))
-			shooter.set(0.8);
-		else if(second.getRawButton(6))
-			shooter.set(-0.8);
-		else if(second.getRawButton(1))
-			shooter.set(second.getRawAxis(3));
-		else
-			shooter.set(0);
-		
+		table.putNumber("PTL", Movement.ptl);
+		table.putNumber("PTR", Movement.ptr);
+		table.putNumber("PBL", Movement.pbl);
+		table.putNumber("PBR", Movement.pbr);
 		Auto.autoDash();
-		table.putNumber("shoot", second.getRawAxis(3));
-		table.putNumber("voltage", ds.getBatteryVoltage());
 	}
 }

@@ -30,7 +30,7 @@ public class ArchiveCode {
 		moveDis(0.3, -0.3, 3); // should be 7
 		turnDegrees(15, false);
 		moveDis(-0.3, -0.3, 1.5);
-		Movement.move(0, 0);
+		Movement.drive(0, 0);
 		Movement.shoot(15000);
 	}
 
@@ -76,7 +76,7 @@ public class ArchiveCode {
 		moveDis(0.3, -0.3, 3); // should be 7
 		turnDegrees(15, false);
 		moveDis(0.3,0.3, 1.5);
-		Movement.move(0, 0);
+		Movement.drive(0, 0);
 		Movement.shoot(15000);
 	}
 	

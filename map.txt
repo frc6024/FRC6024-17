@@ -1,0 +1,39 @@
+Joystick 1:
+X Axis: Move Sideways
+Y Axis: Move Forward
+Z Axis: Point Turn
+Slider: Speed control
+
+Button 1: Brake
+Button 2: Diagonal
+Button 3: Boost
+Button 4: Swerve
+Button 5: Orient 0
+POV: Orient Towards Angle
+Button 6: Orient 180
+Button 7: Orient 60
+Button 8: Orient 300
+Button 9: Orient 45
+Button 10: Gear Vision
+Button 11:  
+Button 12: Vision/Orient Exit
+
+Joystick 2:
+X Axis: Move Sideways
+Y Axis: Move Forward
+Z Axis: Point Turn
+Slider: Speed control
+
+Button 1: Shooter+Loader
+Button 2: 
+Button 3: 
+Button 4: 
+Button 5: 
+POV: 
+Button 6: Swap Camera 
+Button 7: Reverse shooter
+Button 8: Reverse loader
+Button 9: Winch 0.3
+Button 10:  Winch 0.7
+Button 11:  Winch -0.3
+Button 12: Winch -0.7
